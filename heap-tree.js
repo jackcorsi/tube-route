@@ -1,13 +1,18 @@
 class HeapTree {
-    n = 0;
-    heap = [0xbeef];
-    f = function(x, y) {return x - y};
+
+    constructor() {
+        this.f = function (x, y) {
+            return x - y
+        };
+        this.n = 0;
+        this.heap = [0xbeef];
+    }
 
     set comparator(f) {
         this.f = f;
     }
 
-    peek() {
+    get peek() {
         return this.heap[1];
     }
 
@@ -16,33 +21,57 @@ class HeapTree {
     }
 
     get takeLast() {
-        if (this.empty())
+        if (this.empty)
             return null;
         return this.heap[this.n--];
     }
 
+    get toStringSimple() {
+        if (this.empty)
+            return "";
+        let s = "";
+        //Level
+        for (let l = 0; l <= this.depth; l++) {
+            s += l + ":";
+            let pairSecond = false;
+            //Element
+            for (let e = 0; e < Math.pow(2, l); e++) {
+                let x = this.heap[Math.pow(2, l) + e];
+                if (!x)
+                    return s;
+                else if (pairSecond)
+                    s += x + "| ";
+                else
+                    s += x + " ";
+                pairSecond = !pairSecond;
+            }
+            s += "\n";
+        }
+        return s;
+    }
+
     static leftN(n) {
-        return 2*n;
+        return 2 * n;
     }
 
     static rightN(n) {
-        return 2*n + 1;
+        return 2 * n + 1;
     }
 
     static parentN(n) {
-        return n/2;
+        return Math.trunc(n / 2);
     }
 
     bubbleDown(x) {
         let root = this.heap[x];
         let leftN = HeapTree.leftN(x);
-        let left = this.heap[leftN];
-        if (left) {
+        if (leftN <= this.n) {
+            let left = this.heap[leftN];
             let rightN = HeapTree.rightN(x);
             let right = this.heap[rightN];
-            if (this.f(left, root)) {
-                if (right && this.f(right, left)) {
-                    this.heap[x] = right;
+            if (this.f(left, root) > 0) {
+                if (rightN <= this.n && this.f(right, left) > 0) {
+                    this.heap[x] = this.heap[rightN];
                     this.heap[rightN] = root;
                     this.bubbleDown(rightN);
                 } else {
@@ -50,7 +79,7 @@ class HeapTree {
                     this.heap[leftN] = root;
                     this.bubbleDown(leftN);
                 }
-            } else if (right && this.f(right, root)) {
+            } else if (rightN <= this.n && this.f(right, root) > 0) {
                 this.heap[x] = right;
                 this.heap[rightN] = root;
                 this.bubbleDown(rightN);
@@ -64,7 +93,7 @@ class HeapTree {
             return;
         let child = this.heap[x];
         let parent = this.heap[parentN];
-        if (this.f(child, parent)) {
+        if (this.f(child, parent) > 0) {
             this.heap[parentN] = child;
             this.heap[x] = parent;
             this.bubbleUp(parentN);
@@ -76,11 +105,15 @@ class HeapTree {
         this.bubbleUp(this.n);
     }
 
+    get depth() {
+        return Math.trunc(Math.log2(this.n));
+    }
+
     get remove() {
-        if (this.empty())
+        if (this.empty)
             return null;
         let x = this.heap[1];
-        let last = this.takeLast();
+        let last = this.takeLast;
         if (last) {
             this.heap[1] = last;
             this.bubbleDown(1);
@@ -88,4 +121,3 @@ class HeapTree {
         return x;
     }
 }
-
