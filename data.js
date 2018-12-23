@@ -6,6 +6,8 @@ function Node(id, name) {
     this.edges = [];
 }
 
+nodes = [];
+
 function buildEdges(line, nodes) {
     for (var i = 0; i < nodes.length - 1; i++) {
         var node = nodes[i];
@@ -53,8 +55,6 @@ lines = [
     crossrail,
     walkableRoute,
 ];
-
-nodes = [];
 
 //Picadilly
 uxbridge = new Node(0, "Uxbridge");
