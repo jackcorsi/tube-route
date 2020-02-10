@@ -1,1 +1,3 @@
-*Rewrite this after merge*
+Takes two stations and searches for the shortest number of stops to travel between them. By default, switching lines is modelled as costing an aditional stop. The tube layout itself is typed up as a graph of Javascript objects. I started with a Java implementation that uses [Mozilla Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) to parse the Javascript data, then ported the whole thing to JS later because why not. Originally this was two separate repositories, but it doesn't really need to be, so `master` is a merge of the two trees.
+
+https://jackcorsi.dev/tube-route/ (To prove that it works)
